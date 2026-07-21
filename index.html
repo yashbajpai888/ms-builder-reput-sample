@@ -1,0 +1,1728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>MS BUILDERS Google Review Portal</title>
+  <style>
+    :root {
+      --bg: #f5f5f2;
+      --card: #ffffff;
+      --surface: #fafafa;
+      --text: #2c2c2c;
+      --muted: #6d6d6d;
+      --border: rgba(34, 34, 34, 0.08);
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.08);
+      --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.06);
+      --accent: #c59d4d;
+      --accent-dark: #a87f2f;
+      --accent-soft: rgba(197, 157, 77, 0.14);
+      --success: #1f7a4c;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-md: 16px;
+      --radius-sm: 12px;
+      --container: 1120px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      overflow-y: auto;
+      color: var(--text);
+      font-family: "Poppins", "Segoe UI", Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(197, 157, 77, 0.12), transparent 30%),
+        radial-gradient(circle at bottom right, rgba(0, 0, 0, 0.04), transparent 34%),
+        linear-gradient(180deg, #fbfbf8 0%, #f5f5f2 100%);
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(0, 0, 0, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.02) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.5), transparent 80%);
+      opacity: 0.22;
+    }
+
+    .page {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      min-height: 100svh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 18px 18px 14px;
+    }
+
+    .shell {
+      width: min(100%, var(--container));
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .hero {
+      text-align: center;
+      padding: 0 10px;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.72);
+      backdrop-filter: blur(10px);
+      color: var(--muted);
+      border-radius: 999px;
+      padding: 10px 16px;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.92rem;
+      letter-spacing: 0.01em;
+    }
+
+    .hero-icon {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--accent), #efd39d);
+      color: #fff;
+      font-size: 1rem;
+      box-shadow: 0 10px 20px rgba(197, 157, 77, 0.3);
+      flex: 0 0 auto;
+    }
+
+    .hero h1 {
+      margin: 12px auto 8px;
+      max-width: 18ch;
+      color: #222;
+      font-size: clamp(1.95rem, 4.1vw, 4rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+    }
+
+    .hero p {
+      margin: 0 auto;
+      max-width: 850px;
+      color: var(--muted);
+      font-size: clamp(0.96rem, 1.35vw, 1.08rem);
+      line-height: 1.65;
+    }
+
+    .panel {
+      position: relative;
+      overflow: hidden;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(34, 34, 34, 0.08);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+      padding: clamp(14px, 2vw, 22px);
+    }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      inset: auto -20% -30% auto;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(197, 157, 77, 0.16), transparent 68%);
+      pointer-events: none;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      align-items: stretch;
+    }
+
+    .review-card {
+      position: relative;
+      min-height: 0;
+      border-radius: calc(var(--radius-xl) - 4px);
+      padding: clamp(14px, 2.2vw, 24px);
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(252, 252, 250, 0.96));
+      border: 1px solid rgba(34, 34, 34, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.65);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      justify-content: space-between;
+      width: 100%;
+      transform: translateY(0);
+      transition: transform 0.28s ease, box-shadow 0.28s ease;
+    }
+
+    .review-card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .review-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .review-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: #7d5b18;
+      font-size: 0.84rem;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .review-meta {
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .review-text-wrap {
+      position: relative;
+      display: flex;
+      flex: 1 1 auto;
+      align-items: center;
+      justify-content: center;
+      padding: 2px 6px 0;
+    }
+
+    .quote-mark {
+      position: absolute;
+      top: -10px;
+      left: 0;
+      font-size: clamp(4rem, 8vw, 6.5rem);
+      line-height: 1;
+      color: rgba(197, 157, 77, 0.16);
+      user-select: none;
+      pointer-events: none;
+    }
+
+    .review-text {
+      position: relative;
+      margin: 0;
+      width: 100%;
+      max-width: 900px;
+      color: #303030;
+      font-size: clamp(1rem, 1.45vw, 1.22rem);
+      line-height: 1.75;
+      letter-spacing: 0.01em;
+      text-align: center;
+      transition: opacity 0.38s ease, transform 0.38s ease;
+    }
+
+    .review-text.is-fading {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+
+    .review-actions {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      align-content: stretch;
+    }
+
+    .action-card {
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, #fff, #fbfbfa);
+      border: 1px solid rgba(34, 34, 34, 0.08);
+      box-shadow: var(--shadow-soft);
+      padding: 16px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .action-card h2 {
+      margin: 0 0 10px;
+      font-size: 1rem;
+      color: #282828;
+      letter-spacing: -0.01em;
+    }
+
+    .action-card p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.92rem;
+    }
+
+    .buttons {
+      display: grid;
+      gap: 10px;
+      margin-top: auto;
+      margin-bottom: 0;
+    }
+
+    .btn {
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      border-radius: 16px;
+      padding: 13px 16px;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 0.96rem;
+      letter-spacing: 0.01em;
+      transition:
+        transform 0.25s ease,
+        box-shadow 0.25s ease,
+        background 0.25s ease,
+        color 0.25s ease;
+      width: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, transparent 20%, rgba(255, 255, 255, 0.2), transparent 80%);
+      transform: translateX(-110%);
+      transition: transform 0.6s ease;
+    }
+
+    .btn:hover::after {
+      transform: translateX(110%);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .btn-primary {
+      color: #fff;
+      background: linear-gradient(135deg, var(--accent-dark), #d7b46e);
+      box-shadow: 0 14px 30px rgba(168, 127, 47, 0.28);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 16px 32px rgba(168, 127, 47, 0.34);
+    }
+
+    .btn-secondary {
+      color: #2c2c2c;
+      background: linear-gradient(180deg, #fff, #f3f0e7);
+      border: 1px solid rgba(168, 127, 47, 0.22);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(180deg, #fff, #efe8d8);
+    }
+
+    .qr-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      min-height: 0;
+      height: 100%;
+    }
+
+    .qr-shell {
+      width: min(100%, 220px);
+      padding: 14px;
+      background: #fff;
+      border-radius: 22px;
+      border: 1px solid rgba(34, 34, 34, 0.08);
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+      margin-inline: auto;
+    }
+
+    .qr-title {
+      margin: 0;
+      color: #2d2d2d;
+      font-size: 0.98rem;
+      font-weight: 700;
+    }
+
+    .qr-note {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+
+    .footer {
+      text-align: center;
+      color: var(--muted);
+      font-size: 0.88rem;
+      padding: 4px 12px 0;
+    }
+
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: 20px;
+      transform: translateX(-50%) translateY(20px);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 50;
+      background: rgba(29, 29, 29, 0.94);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 999px;
+      box-shadow: 0 16px 34px rgba(0, 0, 0, 0.2);
+      transition: opacity 0.25s ease, transform 0.25s ease;
+      font-size: 0.92rem;
+      max-width: min(90vw, 560px);
+      text-align: center;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(18px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 980px) {
+      .page {
+        padding: 14px 12px 12px;
+      }
+
+      .shell {
+        gap: 12px;
+      }
+
+      .panel {
+        padding: 12px;
+      }
+
+      .review-card {
+        padding: 14px;
+      }
+
+      .review-text {
+        font-size: 1rem;
+        line-height: 1.65;
+      }
+
+      .review-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .review-card {
+        min-height: auto;
+      }
+
+      .qr-shell {
+        width: min(100%, 200px);
+        padding: 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .page {
+        padding: 10px 10px 8px;
+      }
+
+      .shell {
+        gap: 10px;
+      }
+
+      .hero {
+        padding-inline: 0;
+      }
+
+      .hero-badge {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .review-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .panel {
+        padding: 10px;
+      }
+
+      .review-card {
+        padding: 12px;
+      }
+
+      .action-card {
+        padding: 14px;
+      }
+
+      .qr-shell {
+        width: min(100%, 190px);
+      }
+    }
+
+    @media (min-width: 981px) {
+      .review-actions {
+        grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+      }
+
+      .review-card {
+        min-height: calc(100svh - 240px);
+      }
+
+      .action-card {
+        min-height: 100%;
+      }
+    }
+
+    @media (max-height: 900px) {
+      .page {
+        padding-top: 10px;
+        padding-bottom: 8px;
+      }
+
+      .shell {
+        gap: 10px;
+      }
+
+      .hero h1 {
+        margin: 8px auto 6px;
+        font-size: clamp(1.8rem, 3.3vw, 3.2rem);
+      }
+
+      .hero p {
+        font-size: 0.94rem;
+        line-height: 1.5;
+      }
+
+      .panel {
+        padding: 12px;
+      }
+
+      .review-card {
+        gap: 10px;
+        padding: 12px;
+      }
+
+      .review-text {
+        font-size: 0.98rem;
+        line-height: 1.55;
+      }
+
+      .action-card {
+        padding: 12px;
+      }
+
+      .btn {
+        padding: 12px 14px;
+      }
+
+      .qr-shell {
+        width: min(100%, 190px);
+        padding: 10px;
+      }
+
+      .footer {
+        padding-top: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="shell">
+      <section class="hero" aria-label="Hero section">
+        <div class="hero-badge">
+          <span class="hero-icon" aria-hidden="true">🏗️</span>
+          <span>Construction Review Portal</span>
+        </div>
+        <h1>MS BUILDERS Google Review Portal</h1>
+        <p>Thank you for choosing MS BUILDERS. Your valuable feedback helps us improve our services and helps future customers choose the right construction partner.</p>
+      </section>
+
+      <section class="panel" aria-label="Review portal">
+        <div class="review-grid">
+          <article class="review-card" aria-live="polite" aria-atomic="true">
+            <div class="review-header">
+              <div class="review-tag">Generated Review</div>
+              <div class="review-meta" id="reviewCount">Ready for Google feedback</div>
+            </div>
+
+            <div class="review-text-wrap">
+              <div class="quote-mark" aria-hidden="true">“</div>
+              <p class="review-text" id="reviewText"></p>
+            </div>
+
+            <div class="review-actions">
+              <div class="action-card">
+                <h2>Review Actions</h2>
+                <p>Generate a new review instantly, copy it to your clipboard, then move directly to Google to leave feedback.</p>
+                <div class="buttons">
+                  <button class="btn btn-primary" id="generateBtn" type="button">Generate New Review</button>
+                  <button class="btn btn-secondary" id="copyBtn" type="button">Copy &amp; Leave Review</button>
+                </div>
+              </div>
+
+              <div class="action-card qr-wrap">
+                <h2 class="qr-title">QR Code</h2>
+                <div class="qr-shell" id="qrCode"></div>
+                <p class="qr-note">Scan to open this portal on another device.</p>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <footer class="footer">© 2026 MS BUILDERS</footer>
+    </div>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    const GOOGLE_REVIEW_LINK = "https://maps.app.goo.gl/6KENMx5Xrop9QTpV7";
+
+    const reviewState = {
+      history: [],
+      limit: 30,
+      currentReview: ""
+    };
+
+    const reviewText = document.getElementById("reviewText");
+    const reviewCount = document.getElementById("reviewCount");
+    const generateBtn = document.getElementById("generateBtn");
+    const copyBtn = document.getElementById("copyBtn");
+    const toast = document.getElementById("toast");
+
+    const openings = [
+      "We recently hired MS BUILDERS for our dream home construction.",
+      "Choosing MS BUILDERS turned out to be the right decision for our residential project.",
+      "Our experience with MS BUILDERS on this construction project was excellent from day one.",
+      "MS BUILDERS handled our home construction with a level of care that gave us complete confidence.",
+      "From the first discussion, MS BUILDERS showed the professionalism we wanted for our project.",
+      "We selected MS BUILDERS for a major build, and the experience exceeded our expectations.",
+      "Working with MS BUILDERS made our construction journey smooth and reassuring.",
+      "MS BUILDERS delivered a highly dependable service for our new building project.",
+      "Our project with MS BUILDERS began with clear planning and continued with great execution.",
+      "We are glad we trusted MS BUILDERS for our property development work.",
+      "MS BUILDERS took charge of our construction requirements with complete professionalism.",
+      "The team at MS BUILDERS impressed us right from the initial consultation.",
+      "Our residential build with MS BUILDERS was handled with genuine attention to detail.",
+      "MS BUILDERS provided a confident and well-organized approach to our project.",
+      "We approached MS BUILDERS for construction support and received outstanding service.",
+      "MS BUILDERS made the entire building process feel structured and manageable.",
+      "We engaged MS BUILDERS for a custom build and were very pleased with the result.",
+      "MS BUILDERS gave our project the professional handling we were hoping for.",
+      "From the beginning, MS BUILDERS stood out for their discipline and clear approach.",
+      "MS BUILDERS proved to be a reliable choice for our construction needs.",
+      "Our renovation and build work with MS BUILDERS went far better than expected.",
+      "MS BUILDERS handled our residential construction with remarkable consistency.",
+      "We had a very positive experience with MS BUILDERS on our latest project.",
+      "MS BUILDERS brought the right balance of quality, planning, and reliability.",
+      "Our project started strongly thanks to the organized approach of MS BUILDERS.",
+      "MS BUILDERS managed our construction work in a way that felt both professional and efficient.",
+      "We were immediately impressed by MS BUILDERS and their project coordination.",
+      "MS BUILDERS provided excellent support throughout the construction process.",
+      "Our new build was in safe hands with MS BUILDERS.",
+      "MS BUILDERS delivered a solid and reassuring experience for our family project.",
+      "We are satisfied that we chose MS BUILDERS for this important construction work.",
+      "MS BUILDERS made the planning and execution of our project straightforward.",
+      "The service from MS BUILDERS was dependable from start to finish.",
+      "MS BUILDERS created a smooth path for our residential development.",
+      "Our experience with MS BUILDERS reflected true professionalism at every step.",
+      "MS BUILDERS handled the work on our property with care and confidence.",
+      "We found MS BUILDERS to be a trustworthy partner for our build.",
+      "MS BUILDERS delivered a construction experience that felt organized and well managed.",
+      "Our project benefitted greatly from the steady leadership of MS BUILDERS.",
+      "MS BUILDERS exceeded what we expected from a construction company.",
+      "Working with MS BUILDERS gave us complete peace of mind.",
+      "MS BUILDERS turned our building plan into a well-executed reality.",
+      "We appreciated how MS BUILDERS handled the project with care and consistency.",
+      "MS BUILDERS gave us confidence throughout the construction journey.",
+      "The support we received from MS BUILDERS was excellent at every stage.",
+      "MS BUILDERS made a complex project feel simple and controlled.",
+      "We are happy to say MS BUILDERS delivered exactly what we needed.",
+      "MS BUILDERS approached our project with the seriousness and skill it required.",
+      "Our experience with MS BUILDERS was thoughtful, professional, and reliable.",
+      "MS BUILDERS delivered a high-quality construction experience for our home.",
+      "We strongly value the work MS BUILDERS completed for us.",
+      "MS BUILDERS made our project feel well guided from the outset.",
+      "MS BUILDERS provided the dependable construction partner we were searching for."
+    ];
+
+    const projectTypes = [
+      "The team completed our luxury villa with impressive precision and care.",
+      "They managed our residential home build from foundation to finishing without issues.",
+      "Our commercial renovation was completed with a clean and efficient workflow.",
+      "The custom floor plan we requested was executed exactly as discussed.",
+      "They transformed our old property into a modern and functional space.",
+      "The entire house construction process was handled with strong coordination.",
+      "Our office interior upgrade was completed in a practical and polished manner.",
+      "The site work for our new family home moved forward in an organized way.",
+      "They delivered a beautiful duplex build that matched our expectations well.",
+      "The foundation, structure, and finishing were managed with solid workmanship.",
+      "Our bungalow construction was completed with the kind of care every owner wants.",
+      "They handled our renovation and extension project with real expertise.",
+      "The architectural design we chose was brought to life very accurately.",
+      "They completed the civil work for our property with steady progress.",
+      "Our apartment remodeling project was treated with professional focus.",
+      "The home elevation work turned out better than we had imagined.",
+      "They delivered the structural work on time and with impressive stability.",
+      "Our turnkey construction project was managed smoothly from start to handover.",
+      "The team built our house in a way that respected both design and practicality.",
+      "They gave our property a complete makeover with quality workmanship.",
+      "The plastering, tiling, and finishing work were all handled neatly.",
+      "Our farmhouse construction was executed with great planning and discipline.",
+      "They handled the contractor responsibilities with reliability and transparency.",
+      "The boundary and exterior work on our site was completed efficiently.",
+      "They managed our redevelopment project with steady attention to detail.",
+      "Our modern home build came together exactly as the plan suggested.",
+      "The foundation-to-roof process remained well coordinated throughout.",
+      "They completed our renovation with a strong sense of craftsmanship.",
+      "Our retail space construction was organized and completed professionally.",
+      "The project team handled the entire structure with careful supervision.",
+      "They delivered a compact home design with excellent use of space.",
+      "Our property expansion was completed with clear planning and execution.",
+      "The internal finishing of our house showed real quality and consistency.",
+      "They managed the build of our new residence with impressive professionalism.",
+      "Our project included several custom requirements, and all were met well.",
+      "The construction work on our villa was carried out with excellent coordination.",
+      "They took care of our complete house project in a structured, reliable way.",
+      "Our residential upgrade was completed without unnecessary delays.",
+      "The building work for our family home was executed with attention at every stage.",
+      "They completed the entire project scope in a very disciplined manner.",
+      "Our remodeling job was handled carefully and delivered a refined finish.",
+      "The structure they built for us feels strong, neat, and well planned.",
+      "They completed our project with balanced speed and solid workmanship.",
+      "Our dream home construction was managed with remarkable organization.",
+      "The exterior, interior, and finishing elements all came together beautifully.",
+      "They completed the construction work in line with the project vision.",
+      "Our home improvement project was treated with real care and professionalism.",
+      "They provided excellent support for our structural and finishing requirements.",
+      "Our building project progressed in a clear and efficient sequence.",
+      "They managed the complete residential build with consistent quality.",
+      "The result of our construction project reflected good planning and execution."
+    ];
+
+    const qualityStatements = [
+      "The quality of workmanship and finishing was impressive.",
+      "Every detail reflected a high standard of construction quality.",
+      "The materials and workmanship both felt premium throughout the project.",
+      "Their attention to detail was evident in every part of the build.",
+      "The final finish looked clean, refined, and professionally done.",
+      "We were very pleased with the structural quality and overall finishing.",
+      "The craftsmanship remained consistent and reliable from start to end.",
+      "The quality of the work gave the entire project a polished appearance.",
+      "They maintained excellent construction standards throughout the process.",
+      "The outcome clearly showed strong workmanship and careful execution.",
+      "The finishing details were handled with a level of care we appreciated.",
+      "The build quality felt dependable and visually impressive.",
+      "Their team delivered work that looked both sturdy and elegant.",
+      "We could see the care they put into the structure and finish.",
+      "The construction quality remained high at every stage of the project.",
+      "The final result had the kind of finish that feels truly well built.",
+      "The workmanship was neat, balanced, and professionally delivered.",
+      "We found the overall quality to be better than expected.",
+      "The project showed a strong commitment to excellent craftsmanship.",
+      "The surfaces, edges, and finishing details all came out cleanly.",
+      "The team paid close attention to the quality of every deliverable.",
+      "The completed work had a strong and reliable appearance.",
+      "The construction and finishing both reflected excellent standards.",
+      "The build quality made the property feel solid and well planned.",
+      "We were satisfied with the quality of each stage of the work.",
+      "Their workmanship gave the project a premium and dependable feel.",
+      "The final finish was smooth, elegant, and carefully executed.",
+      "Quality control appeared strong throughout the entire project.",
+      "The attention to detail showed in the structure and finishing alike.",
+      "The output looked professional, clean, and built to last.",
+      "They maintained a level of quality that inspired confidence.",
+      "The finished property reflected real skill and dedication.",
+      "Their commitment to high standards was obvious in the final result.",
+      "The workmanship was neat and the finishing was handled well.",
+      "The overall quality gave us a very positive impression.",
+      "We appreciated the care taken to maintain solid build quality.",
+      "The team delivered a dependable and visually appealing finish.",
+      "Every detail felt refined and professionally managed.",
+      "The quality of the final output matched our expectations closely.",
+      "The completed work had a strong sense of durability and finesse.",
+      "Their focus on quality made a noticeable difference in the result.",
+      "The craftsmanship throughout the project was excellent.",
+      "The structure and finish both looked very well executed.",
+      "They consistently delivered neat, strong, and attractive work.",
+      "The project quality stood out as one of its strongest points.",
+      "The build looked reliable, polished, and professionally completed.",
+      "The attention they gave to finishing details was particularly good.",
+      "The quality of the work reflected pride in their craft.",
+      "The final result came together with strong precision and care.",
+      "The project quality felt premium from the beginning to the end.",
+      "The team delivered workmanship that we could confidently recommend."
+    ];
+
+    const communicationStatements = [
+      "The entire team remained professional and communicated every stage clearly.",
+      "Communication stayed smooth and transparent from beginning to completion.",
+      "They kept us informed at every milestone, which we really appreciated.",
+      "The team was easy to reach and always responded clearly.",
+      "We never felt out of the loop because updates were shared regularly.",
+      "Their communication made the whole project much easier to follow.",
+      "The staff explained the process in a way that was simple and reassuring.",
+      "We appreciated how consistently they shared progress updates.",
+      "Every question we had was answered quickly and professionally.",
+      "The communication remained open, honest, and well organized.",
+      "They kept the project running with clear coordination and feedback.",
+      "We always knew what was happening because their updates were timely.",
+      "The team communicated with us in a very respectful and clear manner.",
+      "The project discussions were handled with patience and clarity.",
+      "Their communication gave us confidence at each step of the process.",
+      "We found the updates to be prompt, useful, and easy to understand.",
+      "The team stayed connected with us and explained changes clearly.",
+      "They handled coordination in a way that kept everything running smoothly.",
+      "The communication style was professional and very reliable.",
+      "We never had to chase for updates because they stayed proactive.",
+      "The project manager maintained clear and steady communication throughout.",
+      "They were attentive to our feedback and acted on it promptly.",
+      "The conversation around the project remained respectful and detailed.",
+      "Their communication helped remove stress from the entire experience.",
+      "The team was transparent about progress, timelines, and next steps.",
+      "We received regular updates that made the project feel well managed.",
+      "They made sure our requirements were understood from the start.",
+      "Their clear explanations helped us make decisions with confidence.",
+      "The communication between us and the team was excellent.",
+      "They provided a very responsive and supportive service.",
+      "We felt heard throughout the project, which mattered a lot.",
+      "The team kept the lines of communication open and practical.",
+      "They were prompt in responding and thorough in their explanations.",
+      "Every update arrived in a timely and professional way.",
+      "The team coordinated well and kept everyone aligned.",
+      "They maintained a courteous and straightforward communication style.",
+      "The project communication was one of the strongest parts of the experience.",
+      "Their updates were clear, consistent, and easy to trust.",
+      "The team always explained the next steps before moving ahead.",
+      "We appreciated the honesty and clarity in every discussion.",
+      "Their communication kept the project organized and stress-free.",
+      "They were professional in every conversation and follow-up.",
+      "The team stayed approachable whenever we needed clarification.",
+      "They managed communication with real consistency throughout the work.",
+      "The regular status updates helped us stay informed with ease.",
+      "We were impressed by how clear and organized their communication was.",
+      "They handled our queries quickly and without confusion.",
+      "The project felt well coordinated because communication was so strong.",
+      "Their team made sure every detail was discussed clearly before execution.",
+      "The communication process was simple, direct, and dependable.",
+      "They kept us updated in a way that made the whole build easier to trust.",
+      "The team remained cooperative, responsive, and very professional."
+    ];
+
+    const timelineStatements = [
+      "The project was completed within the promised timeline.",
+      "They delivered the work on schedule without unnecessary delays.",
+      "The timing of the project was managed efficiently and responsibly.",
+      "Each phase moved forward according to the agreed plan.",
+      "The construction progressed steadily and finished on time.",
+      "They respected the timeline and kept the project moving well.",
+      "The work was completed at a pace that felt both fast and controlled.",
+      "They maintained good momentum throughout the entire project.",
+      "The project handover happened exactly when we expected it to.",
+      "Their scheduling was disciplined and dependable.",
+      "The team handled deadlines with real care and consistency.",
+      "We were impressed that the project stayed on track throughout.",
+      "The timeline management helped the build feel efficient and predictable.",
+      "They completed the project without compromising on the schedule.",
+      "The construction phases were finished in a timely and orderly manner.",
+      "Their planning made the overall timeline feel under control.",
+      "The project moved forward without any major interruptions.",
+      "They delivered each stage of the work in the expected timeframe.",
+      "The final completion date matched the commitment they made.",
+      "Their time management was one of the strongest parts of the service.",
+      "The build finished smoothly and without avoidable delay.",
+      "They stayed committed to the project schedule from start to finish.",
+      "The work progressed in a timely way while still maintaining quality.",
+      "Their timeline handling reflected experience and discipline.",
+      "We appreciated how reliably they kept the project on schedule.",
+      "The project stages were completed in the right order and on time.",
+      "They finished the job within the agreed construction window.",
+      "The timeline remained consistent, which kept the project stress-free.",
+      "They planned the work well enough to avoid unnecessary slowdown.",
+      "The project was handed over after a well-managed schedule.",
+      "Their punctuality made a real difference to the overall experience.",
+      "The team completed the build with excellent schedule discipline.",
+      "The delivery pace stayed steady and reliable throughout.",
+      "They honored the deadlines they committed to.",
+      "The project timeline was handled with professionalism and control.",
+      "We found the completion timing to be very satisfactory.",
+      "The construction stayed on track from foundation to finishing.",
+      "They maintained a sensible pace without sacrificing attention.",
+      "The schedule was managed thoughtfully and without confusion.",
+      "Their commitment to the completion date was evident.",
+      "The work finished on time and the coordination was excellent.",
+      "They gave us confidence by staying true to the timeline.",
+      "The project had a strong sense of planning and punctual execution.",
+      "They delivered within the planned duration very effectively.",
+      "The team worked efficiently to keep the timeline intact.",
+      "The overall schedule was handled in a very dependable manner.",
+      "They completed the work in a timeframe that suited us well.",
+      "Their disciplined pace kept the project moving forward steadily.",
+      "The project reached completion right on target.",
+      "Their planning helped ensure the build remained on schedule.",
+      "The timeline experience was smooth, predictable, and well controlled."
+    ];
+
+    const recommendationStatements = [
+      "Overall we are extremely satisfied with the experience and would gladly recommend MS BUILDERS to anyone looking for reliable construction services.",
+      "Definitely recommended for anyone who wants dependable construction support.",
+      "We would happily recommend MS BUILDERS for residential or commercial projects.",
+      "Highly recommended to anyone seeking a professional building partner.",
+      "We would confidently suggest MS BUILDERS to friends and family.",
+      "This is a team we would gladly recommend for future projects.",
+      "We strongly recommend MS BUILDERS for quality construction work.",
+      "Anyone wanting a trustworthy contractor should consider MS BUILDERS.",
+      "We are very comfortable recommending them for similar projects.",
+      "MS BUILDERS would be a strong choice for anyone planning a build.",
+      "We would recommend their services without hesitation.",
+      "Our experience was positive enough that we would gladly refer them.",
+      "MS BUILDERS is a dependable option for anyone needing solid construction work.",
+      "We would certainly recommend them to other property owners.",
+      "Their work quality makes them easy to recommend.",
+      "We would choose MS BUILDERS again and recommend them to others.",
+      "A reliable recommendation from our side for any construction need.",
+      "We found the service good enough to confidently recommend.",
+      "MS BUILDERS deserves strong consideration from future customers.",
+      "We would happily share their name with anyone starting a project.",
+      "The experience was positive enough that we can recommend them freely.",
+      "We recommend MS BUILDERS for their professionalism and quality.",
+      "They are definitely worth recommending to homeowners and developers.",
+      "We would advise anyone needing construction work to speak with them.",
+      "Their work and service make recommendation easy.",
+      "We can recommend them as a reliable and capable team.",
+      "MS BUILDERS is a company we feel good about recommending.",
+      "They would be a smart choice for anyone planning a build.",
+      "We would gladly point others toward MS BUILDERS.",
+      "The overall experience makes them highly recommendable.",
+      "We would absolutely encourage others to work with this team.",
+      "MS BUILDERS gave us enough confidence to recommend them fully.",
+      "We would mention them as a trusted construction option.",
+      "Their service quality made recommendation simple for us.",
+      "We would happily endorse them for future construction projects.",
+      "Anyone looking for steady and professional work should consider them.",
+      "We can recommend them with a very positive impression.",
+      "The project outcome makes them easy to recommend to others.",
+      "We would be pleased to use them again and recommend them again.",
+      "MS BUILDERS earned our recommendation through good work and service.",
+      "We would comfortably suggest them to anyone wanting dependable results.",
+      "Their approach and delivery make them a company we trust to recommend.",
+      "We would confidently recommend MS BUILDERS for quality and reliability.",
+      "The positive experience makes them a very safe recommendation.",
+      "We would point prospective clients toward MS BUILDERS without concern.",
+      "MS BUILDERS is worth recommending for smooth project handling.",
+      "We would gladly recommend their team for any serious construction project.",
+      "Their professionalism makes them an easy recommendation.",
+      "We were satisfied enough to recommend them without reservation.",
+      "MS BUILDERS is the kind of contractor we would recommend again.",
+      "We would suggest them to anyone who values quality and reliability."
+    ];
+
+    const closingStatements = [
+      "We are happy with the final outcome and thank MS BUILDERS for their excellent service.",
+      "Overall, it was a smooth experience and we are pleased with the result.",
+      "The final outcome exceeded our expectations, and we appreciate the whole team.",
+      "Our construction journey ended on a very positive note thanks to MS BUILDERS.",
+      "We are genuinely satisfied with the result and the support we received.",
+      "The finished project looks great, and we thank the team for their hard work.",
+      "The experience was smooth from start to finish and the result speaks for itself.",
+      "We are thankful for the care and professionalism shown throughout the project.",
+      "The final handover left us with a strong sense of satisfaction.",
+      "MS BUILDERS delivered a result we are proud to call our own.",
+      "The entire project concluded in a way that left us very happy.",
+      "We appreciate the effort that went into making the project a success.",
+      "The end result was neat, reliable, and exactly what we hoped for.",
+      "We are pleased to see such a well-executed final build.",
+      "The project ended with a quality finish and a very positive impression.",
+      "We are grateful for the smooth process and the good result.",
+      "The completed work gives us confidence in the choice we made.",
+      "MS BUILDERS has our appreciation for a well-managed project.",
+      "We are happy to close the project with such a solid result.",
+      "The final experience left us with nothing but positive feedback.",
+      "We are satisfied with both the journey and the finished outcome.",
+      "The project completion was handled with professionalism and care.",
+      "We thank the team for making the entire process worthwhile.",
+      "The end result reflects the dedication they brought to the work.",
+      "We are glad we chose MS BUILDERS for this important project.",
+      "The completed property looks excellent and feels well built.",
+      "We are happy to share this positive experience with others.",
+      "The project outcome gives us full confidence in recommending them.",
+      "We appreciate how everything came together in such a satisfying way.",
+      "The result is one we can confidently enjoy and share with pride.",
+      "We are very content with the overall construction experience.",
+      "The build turned out beautifully, and we are thankful for that.",
+      "We are glad to have worked with a team that delivered so well.",
+      "The final project outcome left us extremely pleased.",
+      "We appreciate the strong effort that went into the completed work.",
+      "The result feels durable, attractive, and professionally finished.",
+      "We are happy to end this project with a positive recommendation.",
+      "MS BUILDERS has earned our trust through this successful project.",
+      "The completed work met our needs and left us very satisfied.",
+      "We are thankful for a construction experience that went so well.",
+      "The final handover was smooth and the finished property looks great.",
+      "We are pleased with the way this project was delivered.",
+      "The completed work reflects the quality we were hoping for.",
+      "We appreciate the professionalism that carried through to the end.",
+      "The final result makes us feel confident about the project choice.",
+      "We are glad to have such a positive outcome to share.",
+      "The project ended successfully and we are happy with the result.",
+      "We thank MS BUILDERS for making the process and outcome so positive.",
+      "The finished project is a testament to their solid workmanship.",
+      "We are pleased to close the review with strong satisfaction.",
+      "The final experience was excellent and worth sharing.",
+      "Our overall impression is very positive, and we thank the team."
+    ];
+
+    function random(max) {
+      return Math.floor(Math.random() * max);
+    }
+
+    function pick(list) {
+      return list[random(list.length)];
+    }
+
+    function shuffleWithChance(items, probability) {
+      if (Math.random() > probability) {
+        return items.slice();
+      }
+
+      const output = items.slice();
+      for (let index = output.length - 1; index > 0; index -= 1) {
+        const swapIndex = random(index + 1);
+        [output[index], output[swapIndex]] = [output[swapIndex], output[index]];
+      }
+      return output;
+    }
+
+    function buildReviewSentences() {
+      const sentences = [
+        pick(openings),
+        pick(projectTypes),
+        pick(qualityStatements),
+        pick(communicationStatements),
+        pick(timelineStatements),
+        pick(recommendationStatements),
+        pick(closingStatements)
+      ];
+
+      const variant = random(4);
+
+      if (variant === 1) {
+        return shuffleWithChance([sentences[0], sentences[1], sentences[2], sentences[3], sentences[4], sentences[5], sentences[6]], 1);
+      }
+
+      if (variant === 2) {
+        return [sentences[0], sentences[2], sentences[1], sentences[3], sentences[4], sentences[5], sentences[6]];
+      }
+
+      if (variant === 3) {
+        return [sentences[0], sentences[1], sentences[3], sentences[2], sentences[4], sentences[5], sentences[6]];
+      }
+
+      return sentences;
+    }
+
+    function normalizeReview(sentences) {
+      return sentences.map((part) => part.trim()).join(" ").replace(/\s+/g, " ").trim();
+    }
+
+    function generateReview() {
+      return normalizeReview(buildReviewSentences());
+    }
+
+    function generateUniqueReview() {
+      let attempt = 0;
+      let review = "";
+
+      do {
+        review = generateReview();
+        attempt += 1;
+        if (attempt > 25) {
+          break;
+        }
+      } while (reviewState.history.includes(review));
+
+      reviewState.history.push(review);
+      if (reviewState.history.length > reviewState.limit) {
+        reviewState.history.shift();
+      }
+
+      reviewState.currentReview = review;
+      return review;
+    }
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      clearTimeout(showToast.timer);
+      showToast.timer = setTimeout(() => {
+        toast.classList.remove("show");
+      }, 2200);
+    }
+
+    function updateReviewText(text) {
+      reviewText.classList.add("is-fading");
+
+      window.setTimeout(() => {
+        reviewText.textContent = text;
+        reviewText.classList.remove("is-fading");
+      }, 180);
+    }
+
+    function setReview(review) {
+      updateReviewText(review);
+      reviewCount.textContent = `Last 30 reviews protected • ${reviewState.history.length} stored`;
+    }
+
+    async function copyReview() {
+      const text = reviewState.currentReview || generateUniqueReview();
+
+      try {
+        if (navigator.clipboard && window.isSecureContext) {
+          await navigator.clipboard.writeText(text);
+        } else {
+          const fallback = document.createElement("textarea");
+          fallback.value = text;
+          fallback.setAttribute("readonly", "true");
+          fallback.style.position = "fixed";
+          fallback.style.top = "-9999px";
+          fallback.style.left = "-9999px";
+          document.body.appendChild(fallback);
+          fallback.select();
+          document.execCommand("copy");
+          document.body.removeChild(fallback);
+        }
+
+        showToast("Review copied to clipboard.");
+        redirectToGoogle();
+      } catch (error) {
+        showToast("Copy failed. Please try again.");
+      }
+    }
+
+    function redirectToGoogle() {
+      window.location.href = GOOGLE_REVIEW_LINK;
+    }
+
+    function repeat(value, count) {
+      return Array.from({ length: count }, () => value);
+    }
+
+    class QRCode {
+      constructor(element, options = {}) {
+        this.element = typeof element === "string" ? document.getElementById(element) : element;
+        this.options = Object.assign({
+          text: "",
+          width: 208,
+          height: 208,
+          margin: 2,
+          colorDark: "#1f1f1f",
+          colorLight: "#ffffff"
+        }, options);
+      }
+
+      clear() {
+        if (this.element) {
+          this.element.innerHTML = "";
+        }
+      }
+
+      makeCode(text) {
+        if (!this.element) {
+          return;
+        }
+
+        const matrix = createQRCodeMatrix(String(text || this.options.text || ""));
+        const size = matrix.length;
+        const margin = this.options.margin;
+        const outputSize = Math.min(this.options.width, this.options.height);
+        const moduleCount = size + margin * 2;
+        const cellSize = Math.floor(outputSize / moduleCount);
+        const renderSize = cellSize * moduleCount;
+        const offset = Math.floor((outputSize - renderSize) / 2);
+        const svgParts = [];
+
+        svgParts.push(`<svg xmlns="http://www.w3.org/2000/svg" width="${outputSize}" height="${outputSize}" viewBox="0 0 ${outputSize} ${outputSize}" shape-rendering="crispEdges" role="img" aria-label="QR code">`);
+        svgParts.push(`<rect width="100%" height="100%" fill="${this.options.colorLight}"/>`);
+
+        for (let row = 0; row < size; row += 1) {
+          for (let col = 0; col < size; col += 1) {
+            if (!matrix[row][col]) {
+              continue;
+            }
+
+            const x = offset + (col + margin) * cellSize;
+            const y = offset + (row + margin) * cellSize;
+            svgParts.push(`<rect x="${x}" y="${y}" width="${cellSize}" height="${cellSize}" fill="${this.options.colorDark}"/>`);
+          }
+        }
+
+        svgParts.push(`</svg>`);
+        this.element.innerHTML = svgParts.join("");
+      }
+    }
+
+    function createMatrix(size) {
+      return Array.from({ length: size }, () => Array(size).fill(null));
+    }
+
+    function cloneMatrix(matrix) {
+      return matrix.map((row) => row.slice());
+    }
+
+    function createQRCodeMatrix(text) {
+      const version = 4;
+      const size = 17 + version * 4;
+      const dataCodewords = 80;
+      const eccCodewords = 20;
+      const matrix = createMatrix(size);
+      const reserved = createMatrix(size).map((row) => row.map(() => false));
+
+      const dataBytes = encodeQRData(text, dataCodewords);
+      const eccBytes = createErrorCorrectionBytes(dataBytes, eccCodewords);
+      const codewords = dataBytes.concat(eccBytes);
+      const bits = codewordsToBits(codewords);
+
+      drawFinder(matrix, reserved, 0, 0);
+      drawFinder(matrix, reserved, size - 7, 0);
+      drawFinder(matrix, reserved, 0, size - 7);
+      drawTiming(matrix, reserved);
+      drawAlignment(matrix, reserved, 26, 26);
+      drawDarkModule(matrix, reserved, version);
+      reserveFormatAreas(reserved, size);
+
+      placeDataBits(matrix, reserved, bits);
+
+      let bestMatrix = null;
+      let bestScore = Infinity;
+
+      for (let mask = 0; mask < 8; mask += 1) {
+        const candidate = cloneMatrix(matrix);
+        applyMask(candidate, reserved, mask);
+        addFormatInfo(candidate, reserved, mask, "L");
+        const score = calculatePenalty(candidate);
+
+        if (score < bestScore) {
+          bestScore = score;
+          bestMatrix = candidate;
+        }
+      }
+
+      return bestMatrix || matrix;
+    }
+
+    function encodeQRData(text, capacity) {
+      const bytes = Array.from(new TextEncoder().encode(text));
+      const bits = [];
+
+      pushBits(bits, 0b0100, 4);
+      pushBits(bits, bytes.length, 8);
+
+      bytes.forEach((byte) => pushBits(bits, byte, 8));
+
+      const totalBits = capacity * 8;
+      const remaining = totalBits - bits.length;
+      const terminator = Math.min(4, Math.max(0, remaining));
+      repeat(0, terminator).forEach((bit) => bits.push(bit));
+
+      while (bits.length % 8 !== 0) {
+        bits.push(0);
+      }
+
+      let padByte = true;
+      while (bits.length < totalBits) {
+        pushBits(bits, padByte ? 0xec : 0x11, 8);
+        padByte = !padByte;
+      }
+
+      const output = [];
+      for (let index = 0; index < bits.length; index += 8) {
+        output.push(bitsToNumber(bits.slice(index, index + 8)));
+      }
+      return output;
+    }
+
+    function createErrorCorrectionBytes(dataBytes, eccCount) {
+      const generator = createGeneratorPoly(eccCount);
+      const message = dataBytes.concat(Array(eccCount).fill(0));
+
+      for (let index = 0; index < dataBytes.length; index += 1) {
+        const factor = message[index];
+        if (factor === 0) {
+          continue;
+        }
+
+        for (let gIndex = 0; gIndex < generator.length; gIndex += 1) {
+          message[index + gIndex] ^= gfMultiply(generator[gIndex], factor);
+        }
+      }
+
+      return message.slice(message.length - eccCount);
+    }
+
+    function createGeneratorPoly(degree) {
+      let poly = [1];
+
+      for (let index = 0; index < degree; index += 1) {
+        poly = multiplyPoly(poly, [1, gfPow(2, index)]);
+      }
+
+      return poly;
+    }
+
+    function multiplyPoly(a, b) {
+      const result = Array(a.length + b.length - 1).fill(0);
+
+      for (let indexA = 0; indexA < a.length; indexA += 1) {
+        for (let indexB = 0; indexB < b.length; indexB += 1) {
+          result[indexA + indexB] ^= gfMultiply(a[indexA], b[indexB]);
+        }
+      }
+
+      return result;
+    }
+
+    const GF_EXP = Array(512).fill(0);
+    const GF_LOG = Array(256).fill(0);
+
+    (function buildGaloisTables() {
+      let value = 1;
+
+      for (let index = 0; index < 255; index += 1) {
+        GF_EXP[index] = value;
+        GF_LOG[value] = index;
+        value <<= 1;
+        if (value & 0x100) {
+          value ^= 0x11d;
+        }
+      }
+
+      for (let index = 255; index < 512; index += 1) {
+        GF_EXP[index] = GF_EXP[index - 255];
+      }
+    })();
+
+    function gfMultiply(a, b) {
+      if (a === 0 || b === 0) {
+        return 0;
+      }
+
+      return GF_EXP[(GF_LOG[a] + GF_LOG[b]) % 255];
+    }
+
+    function gfPow(a, power) {
+      if (power === 0) {
+        return 1;
+      }
+      if (a === 0) {
+        return 0;
+      }
+
+      return GF_EXP[(GF_LOG[a] * power) % 255];
+    }
+
+    function codewordsToBits(codewords) {
+      const bits = [];
+      codewords.forEach((codeword) => pushBits(bits, codeword, 8));
+      return bits;
+    }
+
+    function pushBits(target, value, length) {
+      for (let bit = length - 1; bit >= 0; bit -= 1) {
+        target.push((value >> bit) & 1);
+      }
+    }
+
+    function bitsToNumber(bits) {
+      return bits.reduce((accumulator, bit) => ((accumulator << 1) | bit), 0);
+    }
+
+    function setModule(matrix, reserved, row, col, value, isReserved = true) {
+      if (row < 0 || col < 0 || row >= matrix.length || col >= matrix.length) {
+        return;
+      }
+
+      matrix[row][col] = value;
+      if (isReserved) {
+        reserved[row][col] = true;
+      }
+    }
+
+    function drawFinder(matrix, reserved, startRow, startCol) {
+      for (let row = 0; row < 7; row += 1) {
+        for (let col = 0; col < 7; col += 1) {
+          const globalRow = startRow + row;
+          const globalCol = startCol + col;
+          const isDark = row === 0 || row === 6 || col === 0 || col === 6 || (row >= 2 && row <= 4 && col >= 2 && col <= 4);
+          setModule(matrix, reserved, globalRow, globalCol, isDark);
+        }
+      }
+
+      for (let index = -1; index <= 7; index += 1) {
+        setModule(matrix, reserved, startRow - 1, startCol + index, false);
+        setModule(matrix, reserved, startRow + 7, startCol + index, false);
+        setModule(matrix, reserved, startRow + index, startCol - 1, false);
+        setModule(matrix, reserved, startRow + index, startCol + 7, false);
+      }
+    }
+
+    function drawTiming(matrix, reserved) {
+      for (let index = 8; index < matrix.length - 8; index += 1) {
+        const isDark = index % 2 === 0;
+        setModule(matrix, reserved, 6, index, isDark);
+        setModule(matrix, reserved, index, 6, isDark);
+      }
+    }
+
+    function drawAlignment(matrix, reserved, centerRow, centerCol) {
+      const pattern = [
+        [1, 1, 1, 1, 1],
+        [1, 0, 0, 0, 1],
+        [1, 0, 1, 0, 1],
+        [1, 0, 0, 0, 1],
+        [1, 1, 1, 1, 1]
+      ];
+
+      for (let row = 0; row < 5; row += 1) {
+        for (let col = 0; col < 5; col += 1) {
+          setModule(matrix, reserved, centerRow - 2 + row, centerCol - 2 + col, Boolean(pattern[row][col]));
+        }
+      }
+    }
+
+    function drawDarkModule(matrix, reserved, version) {
+      const row = 4 * version + 9;
+      setModule(matrix, reserved, row, 8, true);
+    }
+
+    function reserveFormatAreas(reserved, size) {
+      for (let index = 0; index < 9; index += 1) {
+        if (index !== 6) {
+          reserved[8][index] = true;
+          reserved[index][8] = true;
+        }
+      }
+
+      for (let index = 0; index < 8; index += 1) {
+        reserved[size - 1 - index][8] = true;
+        reserved[8][size - 1 - index] = true;
+      }
+
+      reserved[8][8] = true;
+      reserved[7][8] = true;
+      reserved[8][7] = true;
+    }
+
+    function placeDataBits(matrix, reserved, bits) {
+      const size = matrix.length;
+      let bitIndex = 0;
+      let upward = true;
+
+      for (let col = size - 1; col > 0; col -= 2) {
+        if (col === 6) {
+          col -= 1;
+        }
+
+        for (let offset = 0; offset < size; offset += 1) {
+          const row = upward ? size - 1 - offset : offset;
+
+          for (let inner = 0; inner < 2; inner += 1) {
+            const currentCol = col - inner;
+
+            if (reserved[row][currentCol]) {
+              continue;
+            }
+
+            matrix[row][currentCol] = bitIndex < bits.length ? Boolean(bits[bitIndex]) : false;
+            bitIndex += 1;
+          }
+        }
+
+        upward = !upward;
+      }
+    }
+
+    function applyMask(matrix, reserved, mask) {
+      for (let row = 0; row < matrix.length; row += 1) {
+        for (let col = 0; col < matrix.length; col += 1) {
+          if (reserved[row][col]) {
+            continue;
+          }
+
+          if (maskCondition(mask, row, col)) {
+            matrix[row][col] = !matrix[row][col];
+          }
+        }
+      }
+    }
+
+    function maskCondition(mask, row, col) {
+      switch (mask) {
+        case 0:
+          return (row + col) % 2 === 0;
+        case 1:
+          return row % 2 === 0;
+        case 2:
+          return col % 3 === 0;
+        case 3:
+          return (row + col) % 3 === 0;
+        case 4:
+          return (Math.floor(row / 2) + Math.floor(col / 3)) % 2 === 0;
+        case 5:
+          return ((row * col) % 2 + (row * col) % 3) === 0;
+        case 6:
+          return (((row * col) % 2 + (row * col) % 3) % 2) === 0;
+        case 7:
+          return (((row + col) % 2 + (row * col) % 3) % 2) === 0;
+        default:
+          return false;
+      }
+    }
+
+    function addFormatInfo(matrix, reserved, mask, level) {
+      const formatBits = getFormatBits(level, mask);
+      const size = matrix.length;
+
+      for (let index = 0; index < 15; index += 1) {
+        const bit = ((formatBits >> index) & 1) === 1;
+
+        if (index < 6) {
+          matrix[8][index] = bit;
+          matrix[size - 1 - index][8] = bit;
+        } else if (index < 8) {
+          matrix[8][index + 1] = bit;
+          matrix[size - 15 + index][8] = bit;
+        } else {
+          matrix[8][size - 15 + index] = bit;
+          matrix[14 - index][8] = bit;
+        }
+      }
+
+      matrix[8][8] = true;
+    }
+
+    function getFormatBits(level, mask) {
+      const eccBits = {
+        L: 0b01,
+        M: 0b00,
+        Q: 0b11,
+        H: 0b10
+      }[level];
+
+      let data = ((eccBits << 3) | mask) << 10;
+      const generator = 0x537;
+
+      for (let bit = 14; bit >= 10; bit -= 1) {
+        if ((data >> bit) & 1) {
+          data ^= generator << (bit - 10);
+        }
+      }
+
+      return (((((eccBits << 3) | mask) << 10) | data) ^ 0x5412) & 0x7fff;
+    }
+
+    function calculatePenalty(matrix) {
+      return penaltyRule1(matrix) + penaltyRule2(matrix) + penaltyRule3(matrix) + penaltyRule4(matrix);
+    }
+
+    function penaltyRule1(matrix) {
+      let score = 0;
+
+      for (let row = 0; row < matrix.length; row += 1) {
+        let runColor = matrix[row][0];
+        let runLength = 1;
+
+        for (let col = 1; col < matrix.length; col += 1) {
+          if (matrix[row][col] === runColor) {
+            runLength += 1;
+          } else {
+            if (runLength >= 5) {
+              score += 3 + (runLength - 5);
+            }
+            runColor = matrix[row][col];
+            runLength = 1;
+          }
+        }
+
+        if (runLength >= 5) {
+          score += 3 + (runLength - 5);
+        }
+      }
+
+      for (let col = 0; col < matrix.length; col += 1) {
+        let runColor = matrix[0][col];
+        let runLength = 1;
+
+        for (let row = 1; row < matrix.length; row += 1) {
+          if (matrix[row][col] === runColor) {
+            runLength += 1;
+          } else {
+            if (runLength >= 5) {
+              score += 3 + (runLength - 5);
+            }
+            runColor = matrix[row][col];
+            runLength = 1;
+          }
+        }
+
+        if (runLength >= 5) {
+          score += 3 + (runLength - 5);
+        }
+      }
+
+      return score;
+    }
+
+    function penaltyRule2(matrix) {
+      let score = 0;
+
+      for (let row = 0; row < matrix.length - 1; row += 1) {
+        for (let col = 0; col < matrix.length - 1; col += 1) {
+          const color = matrix[row][col];
+          if (color === matrix[row][col + 1] && color === matrix[row + 1][col] && color === matrix[row + 1][col + 1]) {
+            score += 3;
+          }
+        }
+      }
+
+      return score;
+    }
+
+    function penaltyRule3(matrix) {
+      let score = 0;
+      const patternA = [true, false, true, true, true, false, true, false, false, false, false];
+      const patternB = [false, false, false, false, true, false, true, true, true, false, true];
+
+      for (let row = 0; row < matrix.length; row += 1) {
+        for (let col = 0; col <= matrix.length - 11; col += 1) {
+          const slice = matrix[row].slice(col, col + 11);
+          if (arraysMatch(slice, patternA) || arraysMatch(slice, patternB)) {
+            score += 40;
+          }
+        }
+      }
+
+      for (let col = 0; col < matrix.length; col += 1) {
+        for (let row = 0; row <= matrix.length - 11; row += 1) {
+          const slice = [];
+          for (let offset = 0; offset < 11; offset += 1) {
+            slice.push(matrix[row + offset][col]);
+          }
+
+          if (arraysMatch(slice, patternA) || arraysMatch(slice, patternB)) {
+            score += 40;
+          }
+        }
+      }
+
+      return score;
+    }
+
+    function arraysMatch(a, b) {
+      if (a.length !== b.length) {
+        return false;
+      }
+
+      for (let index = 0; index < a.length; index += 1) {
+        if (Boolean(a[index]) !== Boolean(b[index])) {
+          return false;
+        }
+      }
+
+      return true;
+    }
+
+    function penaltyRule4(matrix) {
+      let blackCount = 0;
+      const totalCount = matrix.length * matrix.length;
+
+      matrix.forEach((row) => {
+        row.forEach((cell) => {
+          if (cell) {
+            blackCount += 1;
+          }
+        });
+      });
+
+      const ratio = (blackCount * 100) / totalCount;
+      const deviation = Math.abs(ratio - 50) / 5;
+      return Math.floor(deviation) * 10;
+    }
+
+    function generateQRCode() {
+      const qr = new QRCode(document.getElementById("qrCode"), {
+        text: window.location.href,
+        width: 208,
+        height: 208,
+        margin: 2,
+        colorDark: "#1f1f1f",
+        colorLight: "#ffffff"
+      });
+
+      qr.clear();
+      qr.makeCode(window.location.href);
+    }
+
+    function initialize() {
+      const firstReview = generateUniqueReview();
+      setReview(firstReview);
+      generateQRCode();
+    }
+
+    generateBtn.addEventListener("click", () => {
+      const nextReview = generateUniqueReview();
+      setReview(nextReview);
+      showToast("New review generated.");
+    });
+
+    copyBtn.addEventListener("click", () => {
+      copyReview();
+    });
+
+    initialize();
+  </script>
+</body>
+</html>
